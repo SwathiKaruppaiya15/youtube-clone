@@ -1,6 +1,5 @@
 import React from 'react'
 import './Sidebar.css'
-
 import home from '../../assets/home.png'
 import game_icon from '../../assets/game_icon.png'
 import automobiles from '../../assets/automobiles.png'
@@ -12,14 +11,14 @@ import blogs from '../../assets/blogs.png'
 import news from '../../assets/news.png'
 import jack from '../../assets/jack.png'
 import simon from '../../assets/simon.png'
-import tom from '.. /../assets/tom.png'
+import tom from '../../assets/tom.png'
 import megan from '../../assets/megan.png'
-import cameron from '../assets/Cameron.png'
+import cameron from '../../assets/cameron.png'
 
-const Sidebar = () => {
+const Sidebar = ({sidebar}) => {
   return (
 
-    <div className='sidebar'>
+    <div className={`sidebar ${sidebar?"":"small-sidebar"}`}>
       <div className="sortcut-links">
           <div className="side-link">
             <img src={home} alt="" /><p>Home</p>
