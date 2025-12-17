@@ -7,8 +7,12 @@ import sav from '../../assets/save.png'
 import {API_KEY} from '../../data'
 import moment from 'moment'
 import { value_converter } from '../../data'
+import { useParams } from 'react-router-dom'
 
-const PlayVideo = ({videoId}) => {
+const PlayVideo = () => {
+
+  const {videoId} = useParams();
+
   const [apiData, setApiData] = useState(null);
   const [channelData, setChannelData] = useState(null);
   const [commentData,setCommentData] = useState([])
@@ -20,7 +24,7 @@ const PlayVideo = ({videoId}) => {
 
   const fetchOtherData = async()=>{
     const channel_url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${apiData.snippet.channelId}&key=${API_KEY}`
-    await fetch(channel_url).then(res=>res.json()).then(data=>setChannelData(data.item[0]))
+    await fetch(channel_url).then(res=>res.json()).then(data=>setChannelData(data.items[0]))
 
   }
 
@@ -31,7 +35,7 @@ const PlayVideo = ({videoId}) => {
 
   useEffect(()=>{
     fetchVideoData();
-  },[]);
+  },[videoId]);
   
   useEffect(()=>{
     fetchOtherData();
@@ -58,7 +62,7 @@ const PlayVideo = ({videoId}) => {
       </div>
       <hr />
       <div className="publisher">
-        <img src={channelData?channelData.snippet.thumbnails.default.ur:""} alt="" />
+        <img src={channelData?channelData.snippet.thumbnails.default.url:""} alt="" />
         <div>
           <p>{apiData?apiData.snippet.channelTitle:""}</p>
           <span>{channelData?value_converter(channelData.statistics.subscriberCount):"1"}Subscribers</span>
