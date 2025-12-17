@@ -1,103 +1,91 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './PlayVideo.css'
-import v1 from '../../assets/video.mp4'
 import li from '../../assets/like.png'
 import dli from '../../assets/dislike.png'
 import sh from '../../assets/share.png'
 import sav from '../../assets/save.png'
-import jac from '../../assets/jack.png'
-import u_p from '../../assets/user_profile.jpg'
+import {API_KEY} from '../../data'
+import moment from 'moment'
+import { value_converter } from '../../data'
 
-const PlayVideo = () => {
+const PlayVideo = ({videoId}) => {
+  const [apiData, setApiData] = useState(null);
+  const [channelData, setChannelData] = useState(null);
+  const [commentData,setCommentData] = useState([])
+
+  const fetchVideoData = async()=>{
+    const videoDetails_url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`
+    await fetch(videoDetails_url).then(res=>res.json()).then(data=> setApiData(data.items[0]))
+  }
+
+  const fetchOtherData = async()=>{
+    const channel_url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${apiData.snippet.channelId}&key=${API_KEY}`
+    await fetch(channel_url).then(res=>res.json()).then(data=>setChannelData(data.item[0]))
+
+  }
+
+  const fetchComment = async()=>{
+    const comment_url = ` https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResult=50&videoId=${videoId}&key=${API_KEY}`
+    await fetch(comment_url).then(res=>res.json()).then(data=>setCommentData(data.items))
+  }
+
+  useEffect(()=>{
+    fetchVideoData();
+  },[]);
+  
+  useEffect(()=>{
+    fetchOtherData();
+  },[apiData])
+
+  useEffect(()=>{
+    fetchComment();
+  },[]);
+
   return (
     <div>
     <div className='play-video'>
-      <video src={v1} controls autoPlay muted></video>
-      <h3>Best YouTube Channel To Learn Web Development</h3>
+      <iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} title="Create YouTube Clone Using React JS | Build Complete Website Like YouTube In React JS 2024" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <h3>{apiData?apiData.snippet.title:"Title Here"}</h3>
       <div className='play-video-info'>
-        <p>1525 Views &bull; 2 days ago</p>
+        <p>{apiData?apiData.statistics.viewCount:"16K"} Views &bull; {apiData?moment(apiData.snippet.publishedAt).fromNow():""}</p>
         <div>
-        <span><img src={li} alt="" />125</span>
-        <span><img src={dli} alt="" />2</span>
+        <span><img src={li} alt="" />{apiData?value_converter(apiData.statistics.likeCount):1}</span>
+        <span><img src={dli} alt="" /> </span>
         <span><img src={sh} alt="" />Share</span>
         <span><img src={sav} alt="" />Save</span>
         </div>
       </div>
+      </div>
       <hr />
       <div className="publisher">
-        <img src={jac} alt="" />
+        <img src={channelData?channelData.snippet.thumbnails.default.ur:""} alt="" />
         <div>
-          <p>Greatstack</p>
-          <span>1M Subscribers</span>
+          <p>{apiData?apiData.snippet.channelTitle:""}</p>
+          <span>{channelData?value_converter(channelData.statistics.subscriberCount):"1"}Subscribers</span>
         </div>
-      </div>
       <button>Subscribe</button>
     </div> 
       <div className="vid-description">
-        <p>Channel that makes learning Easy</p>
-        <p>Subscribe Greatstack to Watch More Tutorials on web development</p>
+        <p>{apiData?apiData.snippet.description.slice(0,250):"Description Here"}</p>
         <hr />
-        <h4>130 Comments</h4>
-        <div className="Comment">
-          <img src={u_p} alt="" />
-          <div>
-            <h3>Jack Nicholson <span>1 days ago</span></h3>
-            <p>A global computer network providing a variety of information and communication facts of interconnection networks using standardized communication protocols.</p>
-            <div className="connand-action">
-              <img src={li} alt="" />
-              <span>244</span>
-              <img src={dli} alt="" />
+        <h4>{apiData?value_converter(apiData.statistics.commentCount):1}</h4>
+        
+        {commentData.map((item,ind)=>{
+          return(
+            <div key={ind} className="Comment">
+              <img src={item.snippet.topLevelComment.snippet.authorProfileImageUrl} alt="" />
+              <div>
+                <h3>{item.snippet.topLevelComment.snippet.authorDisplayName} <span>1 days ago</span></h3>
+                <p>{item.snippet.topLevelComment.snippet.textDisplay}</p>
+                <div className="comment-action">
+                  <img src={li} alt="" />
+                  <span>{value_converter(item.snippet.topLevelComment.snippet.likeCount)}</span>
+                  <img src={dli} alt="" />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="Comment">
-          <img src={u_p} alt="" />
-          <div>
-            <h3>Jack Nicholson <span>1 days ago</span></h3>
-            <p>A global computer network providing a variety of information and communication facts of interconnection networks using standardized communication protocols.</p>
-            <div className="connand-action">
-              <img src={li} alt="" />
-              <span>244</span>
-              <img src={dli} alt="" />
-            </div>
-          </div>
-        </div>
-        <div className="Comment">
-          <img src={u_p} alt="" />
-          <div>
-            <h3>Jack Nicholson <span>1 days ago</span></h3>
-            <p>A global computer network providing a variety of information and communication facts of interconnection networks using standardized communication protocols.</p>
-            <div className="connand-action">
-              <img src={li} alt="" />
-              <span>244</span>
-              <img src={dli} alt="" />
-            </div>
-          </div>
-        </div>
-        <div className="Comment">
-          <img src={u_p} alt="" />
-          <div>
-            <h3>Jack Nicholson <span>1 days ago</span></h3>
-            <p>A global computer network providing a variety of information and communication facts of interconnection networks using standardized communication protocols.</p>
-            <div className="connand-action">
-              <img src={li} alt="" />
-              <span>244</span>
-              <img src={dli} alt="" />
-            </div>
-          </div>
-        </div>
-        <div className="Comment">
-          <img src={u_p} alt="" />
-          <div>
-            <h3>Jack Nicholson <span>1 days ago</span></h3>
-            <p>A global computer network providing a variety of information and communication facts of interconnection networks using standardized communication protocols.</p>
-            <div className="connand-action">
-              <img src={li} alt="" />
-              <span>244</span>
-              <img src={dli} alt="" />
-            </div>
-          </div> 
-        </div>
+          )
+        })}
       </div>
     </div>
   )
