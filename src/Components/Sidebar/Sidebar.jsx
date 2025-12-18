@@ -9,11 +9,11 @@ import tech from '../../assets/tech.png'
 import music from '../../assets/music.png'
 import blogs from '../../assets/blogs.png'
 import news from '../../assets/news.png'
-import jack from '../../assets/jack.png'
-import simon from '../../assets/simon.png'
-import tom from '../../assets/tom.png'
 import megan from '../../assets/megan.png'
-import cameron from '../../assets/cameron.png'
+import swathi from '../../assets/swathi.png'
+import techss from '../../assets/techsuperstar.jpg'
+import rj from '../../assets/ramjan.jpg'
+import vijtv from '../../assets/vijaytv.jpeg'
 
 const Sidebar = ({ sidebar,category,setCategory }) => {
   return (
@@ -70,18 +70,18 @@ const Sidebar = ({ sidebar,category,setCategory }) => {
         <h3>Subscribed</h3>
 
         <div className="side-link"onClick={()=>{setCategory(0)}}>
-          <img src={jack} alt="PewDiePie" />
-          <p>PewDiePie</p>
+          <img src={swathi} alt="swathi" />
+          <p>Swathi</p>
         </div>
 
         <div className="side-link"onClick={()=>{setCategory(0)}}>
-          <img src={simon} alt="MrBeast" />
-          <p>MrBeast</p>
+          <img src={techss} alt="" />
+          <p>Tech Super star</p>
         </div>
 
         <div className="side-link"onClick={()=>{setCategory(0)}}>
-          <img src={tom} alt="Justin Bieber" />
-          <p>Justin Bieber</p>
+          <img src={vijtv} alt="" />
+          <p>Vijay television</p>
         </div>
 
         <div className="side-link"onClick={()=>{setCategory(0)}}>
@@ -90,8 +90,8 @@ const Sidebar = ({ sidebar,category,setCategory }) => {
         </div>
 
         <div className="side-link"onClick={()=>{setCategory(0)}}>
-          <img src={cameron} alt="Nas Daily" />
-          <p>Nas Daily</p>
+          <img src={rj} alt="" />
+          <p>Ram & Jannu</p>
         </div>
       </div>
     </div>
